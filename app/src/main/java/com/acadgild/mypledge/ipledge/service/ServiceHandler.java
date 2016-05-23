@@ -1,5 +1,8 @@
 package com.acadgild.mypledge.ipledge.service;
 
+import android.os.StrictMode;
+import android.util.Log;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -8,8 +11,10 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.utils.URLEncodedUtils;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -20,6 +25,7 @@ public class ServiceHandler {
     static String response = null;
     public final static int GET = 1;
     public final static int POST = 2;
+
 
     public ServiceHandler() {
 
@@ -42,21 +48,30 @@ public class ServiceHandler {
      * */
     public String makeServiceCall(String url, int method,
                                   List<NameValuePair> params) {
+
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+
+        StrictMode.setThreadPolicy(policy);
+
+
         try {
             // http client
             DefaultHttpClient httpClient = new DefaultHttpClient();
             HttpEntity httpEntity = null;
             HttpResponse httpResponse = null;
-
             // Checking http request method type
-            if (method == POST) {
+            if(method==POST){
+
                 HttpPost httpPost = new HttpPost(url);
-                // adding post params
                 if (params != null) {
-                    httpPost.setEntity(new UrlEncodedFormEntity(params));
+                    httpPost.setEntity(new UrlEncodedFormEntity(params,"utf-8"));
                 }
 
+
                 httpResponse = httpClient.execute(httpPost);
+
+                Log.d("data : Http Response:  ", httpResponse.toString());
+
 
             } else if (method == GET) {
                 // appending params to url

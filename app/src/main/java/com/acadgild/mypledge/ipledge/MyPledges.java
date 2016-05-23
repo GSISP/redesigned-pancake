@@ -8,7 +8,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import com.acadgild.mypledge.ipledge.model.AllPledge;
+import com.acadgild.mypledge.ipledge.model.AllPledgeModel;
 import com.facebook.login.LoginManager;
 
 import java.util.ArrayList;
@@ -18,28 +18,13 @@ import java.util.ArrayList;
  */
 public class MyPledges extends AppCompatActivity {
 
-    ArrayList<AllPledge> data;
+    ArrayList<AllPledgeModel> data;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         getActionBar();
-
-
         super.onCreate(savedInstanceState);
-
-
         setContentView(R.layout.myprofile);
-
-        (findViewById(R.id.logout)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                LoginManager.getInstance().logOut();
-                Intent intent = new Intent(MyPledges.this, MainActivity.class);
-                startActivity(intent);
-            }
-        });
 
     }
 
@@ -54,16 +39,10 @@ public class MyPledges extends AppCompatActivity {
 
         switch (item.getItemId()){
 
-            case R.id.profile :
-                Toast.makeText(getApplicationContext(),"Profile Page",Toast.LENGTH_SHORT).show();
-                break;
-
-            case R.id.myPledges :
-                Toast.makeText(getApplicationContext(),"My Pledges Page",Toast.LENGTH_SHORT).show();
-                break;
-
             case R.id.allPledges:
-                Toast.makeText(getApplicationContext(),"All Pledges Page",Toast.LENGTH_SHORT).show();
+                Intent intent=new Intent(getApplicationContext(),AllPledgesActivity.class);
+                startActivity(intent);
+
                 break;
         }
         return super.onOptionsItemSelected(item);

@@ -2,24 +2,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".MainActivity">
-    <item
-        android:id="@+id/action_settings"
-        android:orderInCategory="100"
-        android:title="@string/action_settings"
-        app:showAsAction="never" />
-
-    <item android:id="@+id/profile"
-        android:title="Profile"
-        android:icon="@android:drawable/ic_dialog_info"
-        app:showAsAction="always"></item>
 
     <item android:id="@+id/allPledges"
         android:title="All Pledges"
-        android:icon="@android:drawable/ic_dialog_info"
+        android:icon="@android:drawable/gallery_thumb"
         app:showAsAction="always"></item>
 
+    <item android:id="@+id/logout"
+        android:title="Log Out"></item>
+
     <item android:id="@+id/myPledges"
-        android:title="My Pledges"
-        android:icon="@android:drawable/ic_dialog_info"
-        app:showAsAction="always"></item>
+        android:title="My Pledges"></item>
+
+    <item android:id="@+id/profile"
+        android:title="Profile"></item>
+
 </menu>

@@ -6,39 +6,87 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
+import android.view.View;
 
+import com.acadgild.mypledge.ipledge.constants.MyProfileConstant;
+import com.acadgild.mypledge.ipledge.constants.ServiceConstants;
+import com.acadgild.mypledge.ipledge.model.AllPledgeModel;
+import com.acadgild.mypledge.ipledge.service.PrefUtils;
+import com.acadgild.mypledge.ipledge.service.ServiceHandler;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
 import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
     private CallbackManager callbackManager;
     private LoginButton loginButton;
-
+    ServiceHandler sh;
+    String id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         facebookSDKInitialize();
-        getActionBar();
         setContentView(R.layout.activity_main);
       //  printKeyHash(MainActivity.this);
-        LoginButton loginButton = (LoginButton) findViewById(R.id.login_button);
-        loginButton.setReadPermissions("email");
-        getLoginDetails(loginButton);
 
+        sh=new ServiceHandler();
+        id=PrefUtils.getFromPrefs(getApplicationContext(), MyProfileConstant.KEY_ID,"");
+
+        Log.e("data id : ",id);
+
+        LoginButton loginButton = (LoginButton) findViewById(R.id.login_button);
+
+        if(!id.equals("")) {
+
+            loginButton.setVisibility(View.INVISIBLE);
+            new Handler().postDelayed(new Runnable() {
+
+            /*
+             * Showing splash screen with a timer. This will be useful when you
+             * want to show case your app logo / company
+             */
+
+                @Override
+                public void run() {
+                    // This method will be executed once the timer is over
+                    // Start your app main activity
+                    Intent i = new Intent(getApplicationContext(), AllPledgesActivity.class);
+                    startActivity(i);
+
+                    // close this activity
+                    finish();
+                }
+            }, 3000);
+        }
+        else{
+            loginButton.setReadPermissions(Arrays.asList("public_profile, email, user_friends"));
+            getLoginDetails(loginButton);
+
+        }
     }
 
     @Override
@@ -57,8 +105,49 @@ public class MainActivity extends AppCompatActivity {
         login_button.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult login_result) {
-                Intent intent = new Intent(MainActivity.this, MyPledges.class);
+
+                GraphRequest request = GraphRequest.newMeRequest(
+                        login_result.getAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
+                            @Override
+                            public void onCompleted(JSONObject me, GraphResponse response) {
+
+                                if (response.getError() != null) {
+                                    // handle error
+                                } else {
+
+                                    // Building Parameters
+                                    List<NameValuePair> params = new ArrayList<NameValuePair>();
+                                    params.add(new BasicNameValuePair(MyProfileConstant.KEY_NAME,me.optString("name")));
+                                    params.add(new BasicNameValuePair(MyProfileConstant.KEY_EMAIL,me.optString("email")));
+
+                                    // posting JSON string to server URL
+                                    ArrayList<AllPledgeModel> allPledgeModels = null;
+                                    String data = sh.makeServiceCall(ServiceConstants.ADD_USER_URL, 2,params);
+
+                                    Log.e("Data e : ",data);
+
+                                    try {
+                                        JSONObject user_data=new JSONObject(data);
+                                        id= ""+user_data.get(MyProfileConstant.KEY_ID);
+                                        PrefUtils.saveToPrefs(getApplicationContext(), MyProfileConstant.KEY_ID,id);
+                                        PrefUtils.saveToPrefs(getApplicationContext(), MyProfileConstant.KEY_NAME,me.optString("name"));
+
+
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            }
+                        });//.executeAsync();
+
+                Bundle parameters = new Bundle();
+                parameters.putString("fields", "id,name, email,gender, birthday, location");
+                request.setParameters(parameters);
+                request.executeAsync();
+
+                Intent intent = new Intent(MainActivity.this, AllPledgesActivity.class);
                 startActivity(intent);
+                finish();
             }
 
             @Override
@@ -77,7 +166,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         callbackManager.onActivityResult(requestCode, resultCode, data);
-        Log.e("data",data.toString());
+        Log.e("data", data.toString());
     }
 
     @Override
@@ -113,6 +202,7 @@ public class MainActivity extends AppCompatActivity {
             packageInfo = context.getPackageManager().getPackageInfo(packageName,
                     PackageManager.GET_SIGNATURES);
 
+            Log.e("Package Name=", context.getApplicationContext().getPackageName());
             Log.e("Package Name=", context.getApplicationContext().getPackageName());
 
             for (Signature signature : packageInfo.signatures) {
