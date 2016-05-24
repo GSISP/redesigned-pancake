@@ -30,9 +30,9 @@ public class MyProfile extends AppCompatActivity {
         setContentView(R.layout.myprofile);
 
         TextView nameO = (TextView) findViewById(R.id.tvName);
-       // ImageView img_profile = (ImageView) findViewById(R.id.imgProfile);
+        // ImageView img_profile = (ImageView) findViewById(R.id.img_pro);
         String name = PrefUtils.getFromPrefs(getApplicationContext(), MyProfileConstant.KEY_NAME, "");
-        String user_id = PrefUtils.getFromPrefs(getApplicationContext(), MyProfileConstant.KEY_ID, "");
+        String user_id = PrefUtils.getFromPrefs(getApplicationContext(), "fb_id", "");
 
         nameO.setText(name);
 
@@ -41,30 +41,5 @@ public class MyProfile extends AppCompatActivity {
         profilePictureView = (ProfilePictureView) findViewById(R.id.imgProfile);
 
         profilePictureView.setProfileId(user_id);
-
-       /* try {
-            Bitmap bitmap = getFacebookProfilePicture(user_id);
-
-            img_profile.setImageBitmap(bitmap);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-
-    }
-
-    public static Bitmap getFacebookProfilePicture(String userID)
-            throws SocketException, SocketTimeoutException, MalformedURLException, IOException, Exception
-    {
-        String imageURL;
-
-        Bitmap bitmap = null;
-        imageURL = "https://graph.facebook.com/"+userID+"/picture?type=large";
-        InputStream in = (InputStream) new URL(imageURL).getContent();
-        bitmap = BitmapFactory.decodeStream(in);
-
-        return bitmap;
-    }*/
-
     }
 }

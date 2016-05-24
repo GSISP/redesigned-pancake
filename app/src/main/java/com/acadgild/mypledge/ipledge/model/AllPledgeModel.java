@@ -13,6 +13,7 @@ public class AllPledgeModel {
     private int pledge_unit_id;
     private int pledge_unit_quantity;
     private int progress_auto_update;
+    private boolean already_taken;
 
 
     public String getName() {
@@ -77,5 +78,13 @@ public class AllPledgeModel {
 
     public void setProgress_auto_update(int progress_auto_update) {
         this.progress_auto_update = progress_auto_update;
+    }
+
+    public boolean isAlready_taken() {
+        return already_taken;
+    }
+
+    public void setAlready_taken(boolean already_taken) {
+        this.already_taken = already_taken;
     }
 }

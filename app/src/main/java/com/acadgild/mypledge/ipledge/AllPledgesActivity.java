@@ -19,6 +19,7 @@ import com.acadgild.mypledge.ipledge.service.ServiceHandler;
 import com.facebook.login.LoginManager;
 
 import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -72,13 +73,14 @@ public class AllPledgesActivity extends AppCompatActivity {
 
         protected ArrayList<AllPledgeModel> doInBackground(String... args) {
 
-
-            // Building Parameters
-            List<NameValuePair> params = new ArrayList<NameValuePair>();
-
             // posting JSON string to server URL
             ArrayList<AllPledgeModel> allPledgeModels = null;
             try {
+                // Building Parameters
+                List<NameValuePair> params = new ArrayList<NameValuePair>();
+
+                String user_id = PrefUtils.getFromPrefs(getApplicationContext(), MyProfileConstant.KEY_ID, "");
+                params.add(new BasicNameValuePair(MyProfileConstant.KEY_ID,user_id));
 
                 String data = sh.makeServiceCall(ServiceConstants.ALL_PLEDGES_URL,2, params);
 
@@ -97,9 +99,9 @@ public class AllPledgesActivity extends AppCompatActivity {
                         allPledgeModel.setName(singlePledge.get(AllPledgesConstant.KEY_NAME).toString());
                         allPledgeModel.setDescription(singlePledge.get(AllPledgesConstant.KEY_DESCRIPTION).toString());
                         allPledgeModel.setPoints(Integer.parseInt(singlePledge.get(AllPledgesConstant.KEY_POINTS).toString()));
-                      //  System.out.println("Data : "+Integer.parseInt(singlePledge.get(AllPledgesConstant.KEY_POINTS).toString()));
+                        //System.out.println("Data : "+Integer.parseInt(singlePledge.get(AllPledgesConstant.KEY_POINTS).toString()));
                         allPledgeModel.setPledge_unit_quantity(Integer.parseInt(singlePledge.get(AllPledgesConstant.KEY_UNIT_QUATITY).toString()));
-
+                        allPledgeModel.setAlready_taken(Boolean.parseBoolean(singlePledge.get(AllPledgesConstant.KEY_ALREADY_TAKEN).toString()));
                         allPledgeModels.add(allPledgeModel);
                     }
 
@@ -143,6 +145,7 @@ public class AllPledgesActivity extends AppCompatActivity {
             case R.id.logout:
                 LoginManager.getInstance().logOut();
                 PrefUtils.removeFromPrefs(getApplicationContext(), MyProfileConstant.KEY_ID);
+                PrefUtils.removeFromPrefs(getApplicationContext(), "fb_id");
                 finish();
                 break;
 

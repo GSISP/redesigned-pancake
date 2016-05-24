@@ -131,6 +131,7 @@ public class MainActivity extends AppCompatActivity {
                                         id= ""+user_data.get(MyProfileConstant.KEY_ID);
                                         PrefUtils.saveToPrefs(getApplicationContext(), MyProfileConstant.KEY_ID,id);
                                         PrefUtils.saveToPrefs(getApplicationContext(), MyProfileConstant.KEY_NAME,me.optString("name"));
+                                        PrefUtils.saveToPrefs(getApplicationContext(), "fb_id",me.optString("id"));
 
 
                                     } catch (JSONException e) {
