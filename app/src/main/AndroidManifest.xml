@@ -32,7 +32,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".MyPledges"></activity>
+        <activity android:name=".MyPledgesActivity"></activity>
         <activity android:name=".AllPledgesActivity"></activity>
         <activity android:name=".MyProfile"></activity>
 

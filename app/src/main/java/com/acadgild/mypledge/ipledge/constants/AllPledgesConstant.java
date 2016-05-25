@@ -15,4 +15,7 @@ public class AllPledgesConstant {
     static final public String KEY_UNIT_QUATITY= "pledge_unit_quantity";
     static final public String KEY_PROGRESS_AUTO_UPDATE= "progress_auto_update";
     static final public String KEY_ALREADY_TAKEN="already_taken";
+    static final public String KEY_USER_PLEDGE_ID="id";
+    static final public String KEY_QUANTITY_COMPLETED="pledge_units_completed";
+
 }

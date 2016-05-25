@@ -14,7 +14,24 @@ public class AllPledgeModel {
     private int pledge_unit_quantity;
     private int progress_auto_update;
     private boolean already_taken;
+    private int pledge_user_id;
+    private int pledge_units_completed;
 
+    public int getPledge_units_completed() {
+        return pledge_units_completed;
+    }
+
+    public void setPledge_units_completed(int pledge_units_completed) {
+        this.pledge_units_completed = pledge_units_completed;
+    }
+
+    public int getPledge_user_id() {
+        return pledge_user_id;
+    }
+
+    public void setPledge_user_id(int pledge_user_id) {
+        this.pledge_user_id = pledge_user_id;
+    }
 
     public String getName() {
         return name;

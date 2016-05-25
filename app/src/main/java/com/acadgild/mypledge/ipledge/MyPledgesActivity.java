@@ -5,11 +5,11 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Menu;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.ListView;
 
-import com.acadgild.mypledge.ipledge.adapter.AllPledgesAdapter;
+import com.acadgild.mypledge.ipledge.adapter.MyPledgesAdapter;
 import com.acadgild.mypledge.ipledge.constants.AllPledgesConstant;
 import com.acadgild.mypledge.ipledge.constants.MyProfileConstant;
 import com.acadgild.mypledge.ipledge.constants.ServiceConstants;
@@ -28,9 +28,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by pushp_000 on 5/22/2016.
+ * Created by pushp_000 on 5/12/2016.
  */
-public class AllPledgesActivity extends AppCompatActivity {
+public class MyPledgesActivity extends AppCompatActivity {
 
     private ProgressDialog progressDialog;
 
@@ -38,7 +38,7 @@ public class AllPledgesActivity extends AppCompatActivity {
 
     ListView lv;
 
-    AllPledgesAdapter adapter;
+    MyPledgesAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +63,7 @@ public class AllPledgesActivity extends AppCompatActivity {
         protected void onPreExecute() {
             super.onPreExecute();
 
-            progressDialog = new ProgressDialog(AllPledgesActivity.this);
+            progressDialog = new ProgressDialog(MyPledgesActivity.this);
             progressDialog.setCancelable(true);
             progressDialog.setMessage("Loading...");
             progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
@@ -82,7 +82,7 @@ public class AllPledgesActivity extends AppCompatActivity {
                 String user_id = PrefUtils.getFromPrefs(getApplicationContext(), MyProfileConstant.KEY_ID, "");
                 params.add(new BasicNameValuePair(MyProfileConstant.KEY_ID,user_id));
 
-                String data = sh.makeServiceCall(ServiceConstants.ALL_PLEDGES_URL,2, params);
+                String data = sh.makeServiceCall(ServiceConstants.GET_USER_PLEDGE_URL,2, params);
 
                 try {
 
@@ -92,17 +92,36 @@ public class AllPledgesActivity extends AppCompatActivity {
 
                     for (int i = 0; i < data.length(); i++) {
 
-                        JSONObject singlePledge = allPledgesList.getJSONObject(i);
+                        JSONObject singlePledge1 = allPledgesList.getJSONObject(i);
+
+                        JSONObject singlePledge=singlePledge1.getJSONObject("pledge");
 
                         AllPledgeModel allPledgeModel = new AllPledgeModel();
+                        int user_pledge_id=Integer.parseInt(singlePledge1.get(AllPledgesConstant.KEY_USER_PLEDGE_ID).toString());
+                                allPledgeModel.setPledge_user_id(user_pledge_id);
+
+                        Log.e("data e value ",""+user_pledge_id);
+
                         allPledgeModel.setId(Integer.parseInt(singlePledge.get(AllPledgesConstant.KEY_ID).toString()));
                         allPledgeModel.setName(singlePledge.get(AllPledgesConstant.KEY_NAME).toString());
                         allPledgeModel.setDescription(singlePledge.get(AllPledgesConstant.KEY_DESCRIPTION).toString());
                         allPledgeModel.setPoints(Integer.parseInt(singlePledge.get(AllPledgesConstant.KEY_POINTS).toString()));
                         //System.out.println("Data : "+Integer.parseInt(singlePledge.get(AllPledgesConstant.KEY_POINTS).toString()));
                         allPledgeModel.setPledge_unit_quantity(Integer.parseInt(singlePledge.get(AllPledgesConstant.KEY_UNIT_QUATITY).toString()));
-                        allPledgeModel.setAlready_taken(Boolean.parseBoolean(singlePledge.get(AllPledgesConstant.KEY_ALREADY_TAKEN).toString()));
+                      //  allPledgeModel.setAlready_taken(Boolean.parseBoolean(singlePledge.get(AllPledgesConstant.KEY_ALREADY_TAKEN).toString()));
+
+                        // Building Parameters
+                        List<NameValuePair> params1 = new ArrayList<NameValuePair>();
+                        params1.add(new BasicNameValuePair("user_pledge_id", "" + user_pledge_id));
+
+                        String data1 = sh.makeServiceCall(ServiceConstants.GET_PLEDGE_PROGRESS_URL, 2,params1);
+
+                        JSONObject obj=new JSONObject(data1);
+
+                        allPledgeModel.setPledge_units_completed(Integer.parseInt(obj.get(AllPledgesConstant.KEY_QUANTITY_COMPLETED).toString()));
+
                         allPledgeModels.add(allPledgeModel);
+
                     }
 
                 } catch (JSONException e) {
@@ -120,15 +139,9 @@ public class AllPledgesActivity extends AppCompatActivity {
             super.onPostExecute(s);
             progressDialog.dismiss();
 
-            adapter=new AllPledgesAdapter(AllPledgesActivity.this, R.id.allPledges,s);
+            adapter=new MyPledgesAdapter(MyPledgesActivity.this, R.id.myPledges,s);
             lv.setAdapter(adapter);
         }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main,menu);
-        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
@@ -137,8 +150,9 @@ public class AllPledgesActivity extends AppCompatActivity {
         switch (item.getItemId()){
 
             case R.id.myPledges:
-                Intent intent=new Intent(getApplicationContext(),MyPledgesActivity.class);
+                Intent intent=new Intent(getApplicationContext(),AllPledgesActivity.class);
                 startActivity(intent);
+                finish();
                 break;
 
             case R.id.logout:
