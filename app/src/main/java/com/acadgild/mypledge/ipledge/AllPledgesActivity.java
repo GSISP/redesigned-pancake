@@ -1,6 +1,8 @@
 package com.acadgild.mypledge.ipledge;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -16,6 +18,7 @@ import com.acadgild.mypledge.ipledge.constants.ServiceConstants;
 import com.acadgild.mypledge.ipledge.model.AllPledgeModel;
 import com.acadgild.mypledge.ipledge.service.PrefUtils;
 import com.acadgild.mypledge.ipledge.service.ServiceHandler;
+import com.acadgild.mypledge.ipledge.util.Connectivity;
 import com.facebook.login.LoginManager;
 
 import org.apache.http.NameValuePair;
@@ -52,8 +55,24 @@ public class AllPledgesActivity extends AppCompatActivity {
 
         sh=new ServiceHandler();
 
-        GetAllPledges allPledges=new GetAllPledges();
-        allPledges.execute("");
+        if(Connectivity.isConnected(getApplicationContext())) {
+            GetAllPledges allPledges = new GetAllPledges();
+            allPledges.execute("");
+        }
+        else{
+            AlertDialog alertDialog = new AlertDialog.Builder(AllPledgesActivity.this).create();
+
+            alertDialog.setTitle("Info");
+            alertDialog.setMessage("Internet not available, Cross check your internet connectivity and try again");
+            alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    finish();
+
+                }
+            });
+
+            alertDialog.show();
+        }
 
 
     }
@@ -120,7 +139,7 @@ public class AllPledgesActivity extends AppCompatActivity {
             super.onPostExecute(s);
             progressDialog.dismiss();
 
-            adapter=new AllPledgesAdapter(AllPledgesActivity.this, R.id.allPledges,s);
+            adapter=new AllPledgesAdapter(AllPledgesActivity.this, R.layout.all_pledges,s);
             lv.setAdapter(adapter);
         }
     }
@@ -145,6 +164,8 @@ public class AllPledgesActivity extends AppCompatActivity {
                 LoginManager.getInstance().logOut();
                 PrefUtils.removeFromPrefs(getApplicationContext(), MyProfileConstant.KEY_ID);
                 PrefUtils.removeFromPrefs(getApplicationContext(), "fb_id");
+                PrefUtils.removeFromPrefs(getApplicationContext(), "fb_access_token");
+
                 finish();
                 break;
 

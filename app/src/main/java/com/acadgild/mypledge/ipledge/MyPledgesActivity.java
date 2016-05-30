@@ -98,9 +98,9 @@ public class MyPledgesActivity extends AppCompatActivity {
 
                         AllPledgeModel allPledgeModel = new AllPledgeModel();
                         int user_pledge_id=Integer.parseInt(singlePledge1.get(AllPledgesConstant.KEY_USER_PLEDGE_ID).toString());
-                                allPledgeModel.setPledge_user_id(user_pledge_id);
+                        allPledgeModel.setPledge_user_id(user_pledge_id);
 
-                        Log.e("data e value ",""+user_pledge_id);
+                        Log.e("data e value ", "" + user_pledge_id);
 
                         allPledgeModel.setId(Integer.parseInt(singlePledge.get(AllPledgesConstant.KEY_ID).toString()));
                         allPledgeModel.setName(singlePledge.get(AllPledgesConstant.KEY_NAME).toString());
@@ -108,7 +108,7 @@ public class MyPledgesActivity extends AppCompatActivity {
                         allPledgeModel.setPoints(Integer.parseInt(singlePledge.get(AllPledgesConstant.KEY_POINTS).toString()));
                         //System.out.println("Data : "+Integer.parseInt(singlePledge.get(AllPledgesConstant.KEY_POINTS).toString()));
                         allPledgeModel.setPledge_unit_quantity(Integer.parseInt(singlePledge.get(AllPledgesConstant.KEY_UNIT_QUATITY).toString()));
-                      //  allPledgeModel.setAlready_taken(Boolean.parseBoolean(singlePledge.get(AllPledgesConstant.KEY_ALREADY_TAKEN).toString()));
+                        allPledgeModel.setProgress_auto_update(Integer.parseInt(singlePledge.get(AllPledgesConstant.KEY_PROGRESS_AUTO_UPDATE).toString()));
 
                         // Building Parameters
                         List<NameValuePair> params1 = new ArrayList<NameValuePair>();

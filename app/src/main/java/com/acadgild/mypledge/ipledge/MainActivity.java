@@ -18,6 +18,7 @@ import com.acadgild.mypledge.ipledge.constants.ServiceConstants;
 import com.acadgild.mypledge.ipledge.model.AllPledgeModel;
 import com.acadgild.mypledge.ipledge.service.PrefUtils;
 import com.acadgild.mypledge.ipledge.service.ServiceHandler;
+import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -45,22 +46,25 @@ public class MainActivity extends AppCompatActivity {
     private LoginButton loginButton;
     ServiceHandler sh;
     String id;
+    static AccessToken accessToken;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        facebookSDKInitialize();
+
         setContentView(R.layout.activity_main);
-      //  printKeyHash(MainActivity.this);
+        facebookSDKInitialize();
 
-        sh=new ServiceHandler();
-        id=PrefUtils.getFromPrefs(getApplicationContext(), MyProfileConstant.KEY_ID,"");
+        //  printKeyHash(MainActivity.this);
 
-        Log.e("data id : ",id);
+        sh = new ServiceHandler();
+        id = PrefUtils.getFromPrefs(getApplicationContext(), MyProfileConstant.KEY_ID, "");
+
+        Log.e("data id : ", id);
 
         LoginButton loginButton = (LoginButton) findViewById(R.id.login_button);
 
-        if(!id.equals("")) {
+        if (!id.equals("")) {
 
             loginButton.setVisibility(View.INVISIBLE);
             new Handler().postDelayed(new Runnable() {
@@ -81,8 +85,7 @@ public class MainActivity extends AppCompatActivity {
                     finish();
                 }
             }, 3000);
-        }
-        else{
+        } else {
             loginButton.setReadPermissions(Arrays.asList("public_profile, email, user_friends"));
             getLoginDetails(loginButton);
 
@@ -99,17 +102,22 @@ public class MainActivity extends AppCompatActivity {
     /*
  Register a callback function with LoginButton to respond to the login result.
 */
-    protected void getLoginDetails(LoginButton login_button){
+    protected void getLoginDetails(final LoginButton login_button) {
 
         // Callback registration
         login_button.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
-            public void onSuccess(LoginResult login_result) {
+            public void onSuccess(final LoginResult login_result) {
 
                 GraphRequest request = GraphRequest.newMeRequest(
                         login_result.getAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
                             @Override
                             public void onCompleted(JSONObject me, GraphResponse response) {
+
+                                accessToken = login_result.getAccessToken();
+
+                                PrefUtils.saveToPrefs(getApplicationContext(), "fb_access_token", String.valueOf(login_result.getAccessToken()));
+
 
                                 if (response.getError() != null) {
                                     // handle error
@@ -117,21 +125,21 @@ public class MainActivity extends AppCompatActivity {
 
                                     // Building Parameters
                                     List<NameValuePair> params = new ArrayList<NameValuePair>();
-                                    params.add(new BasicNameValuePair(MyProfileConstant.KEY_NAME,me.optString("name")));
-                                    params.add(new BasicNameValuePair(MyProfileConstant.KEY_EMAIL,me.optString("email")));
+                                    params.add(new BasicNameValuePair(MyProfileConstant.KEY_NAME, me.optString("name")));
+                                    params.add(new BasicNameValuePair(MyProfileConstant.KEY_EMAIL, me.optString("email")));
 
                                     // posting JSON string to server URL
                                     ArrayList<AllPledgeModel> allPledgeModels = null;
-                                    String data = sh.makeServiceCall(ServiceConstants.ADD_USER_URL, 2,params);
+                                    String data = sh.makeServiceCall(ServiceConstants.ADD_USER_URL, 2, params);
 
-                                    Log.e("Data e : ",data);
+                                    Log.e("Data e : ", data);
 
                                     try {
-                                        JSONObject user_data=new JSONObject(data);
-                                        id= ""+user_data.get(MyProfileConstant.KEY_ID);
-                                        PrefUtils.saveToPrefs(getApplicationContext(), MyProfileConstant.KEY_ID,id);
-                                        PrefUtils.saveToPrefs(getApplicationContext(), MyProfileConstant.KEY_NAME,me.optString("name"));
-                                        PrefUtils.saveToPrefs(getApplicationContext(), "fb_id",me.optString("id"));
+                                        JSONObject user_data = new JSONObject(data);
+                                        id = "" + user_data.get(MyProfileConstant.KEY_ID);
+                                        PrefUtils.saveToPrefs(getApplicationContext(), MyProfileConstant.KEY_ID, id);
+                                        PrefUtils.saveToPrefs(getApplicationContext(), MyProfileConstant.KEY_NAME, me.optString("name"));
+                                        PrefUtils.saveToPrefs(getApplicationContext(), "fb_id", me.optString("id"));
 
 
                                     } catch (JSONException e) {
@@ -216,8 +224,7 @@ public class MainActivity extends AppCompatActivity {
             }
         } catch (PackageManager.NameNotFoundException e1) {
             Log.e("Name not found", e1.toString());
-        }
-        catch (NoSuchAlgorithmException e) {
+        } catch (NoSuchAlgorithmException e) {
             Log.e("No such an algorithm", e.toString());
         } catch (Exception e) {
             Log.e("Exception", e.toString());
@@ -225,4 +232,5 @@ public class MainActivity extends AppCompatActivity {
 
         return key;
     }
+
 }

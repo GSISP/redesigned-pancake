@@ -23,6 +23,8 @@ public class PrefUtils {
         editor.commit();
     }
 
+
+
     /**
      * Called to retrieve required value from shared preferences, identified by given key.
      * Default value will be returned of no value found or error occurred.

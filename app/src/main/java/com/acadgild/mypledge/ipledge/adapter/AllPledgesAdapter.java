@@ -18,6 +18,7 @@ import com.acadgild.mypledge.ipledge.constants.ServiceConstants;
 import com.acadgild.mypledge.ipledge.model.AllPledgeModel;
 import com.acadgild.mypledge.ipledge.service.PrefUtils;
 import com.acadgild.mypledge.ipledge.service.ServiceHandler;
+import com.acadgild.mypledge.ipledge.util.Connectivity;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -58,7 +59,7 @@ public class AllPledgesAdapter extends ArrayAdapter<AllPledgeModel> {
         holder.tv_description=(TextView) rowView.findViewById(R.id.tv_description);
         holder.tv_points=(TextView) rowView.findViewById(R.id.tv_points);
         holder.tv_quantity=(TextView) rowView.findViewById(R.id.tv_quantity);
-        holder.take_status=(Button) rowView.findViewById(R.id.bt_Take);
+        holder.take_status=(Button) rowView.findViewById(R.id.bt_take);
 
 
         holder.tv_title.setText(allPledgeModel.getName());
@@ -69,59 +70,74 @@ public class AllPledgesAdapter extends ArrayAdapter<AllPledgeModel> {
 
 
         if(allPledgeModel.isAlready_taken()) {
-            holder.take_status.setText("Taken");
+            holder.take_status.setBackground(getContext().getResources().getDrawable(R.drawable.taken));
         }
 
         holder.take_status.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(Connectivity.isConnected(context.getApplicationContext())) {
+        if (!allPledgeModel.isAlready_taken()) {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                context);
 
+        // set title
+        alertDialogBuilder.setTitle("Confirm Pledge !");
 
-                if(!allPledgeModel.isAlready_taken()) {
-                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
-                            context);
+        // set dialog message
+        alertDialogBuilder
+                .setMessage("Are you sure you want to take this pledge ?")
+                .setCancelable(false)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // if this button is clicked, close
+                        // current activity
+                        ServiceHandler sh = new ServiceHandler();
 
-                    // set title
-                    alertDialogBuilder.setTitle("Confirm Pledge !");
-
-                    // set dialog message
-                    alertDialogBuilder
-                            .setMessage("Are you sure you want to take this pledge ?")
-                            .setCancelable(false)
-                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-                                    // if this button is clicked, close
-                                    // current activity
-                                    ServiceHandler sh = new ServiceHandler();
-
-                                    String user_id = PrefUtils.getFromPrefs(context.getApplicationContext(), MyProfileConstant.KEY_ID, "");
+                        String user_id = PrefUtils.getFromPrefs(context.getApplicationContext(), MyProfileConstant.KEY_ID, "");
 
 // Building Parameters
-                                    List<NameValuePair> params = new ArrayList<NameValuePair>();
-                                    params.add(new BasicNameValuePair(MyProfileConstant.KEY_ID, user_id));
-                                    params.add(new BasicNameValuePair(AllPledgesConstant.KEY_PLEDGE_ID, "" + allPledgeModel.getId()));
+                        List<NameValuePair> params = new ArrayList<NameValuePair>();
+                        params.add(new BasicNameValuePair(MyProfileConstant.KEY_ID, user_id));
+                        params.add(new BasicNameValuePair(AllPledgesConstant.KEY_PLEDGE_ID, "" + allPledgeModel.getId()));
 
-                                    // posting JSON string to server URL
-                                    String data = sh.makeServiceCall(ServiceConstants.ADD_PLEDGE_TO_USER_URL, 2, params);
-                                    holder.take_status.setText("Taken");
+                        // posting JSON string to server URL
+                        String data = sh.makeServiceCall(ServiceConstants.ADD_PLEDGE_TO_USER_URL, 2, params);
+                        holder.take_status.setText("Taken");
 
-                                    Log.e("data take :", data);
-                                }
-                            })
-                            .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-                                    // if this button is clicked, just close
-                                    // the dialog box and do nothing
-                                    dialog.cancel();
-                                }
-                            });
+                        Log.e("data take :", data);
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // if this button is clicked, just close
+                        // the dialog box and do nothing
+                        dialog.cancel();
+                    }
+                });
 
-                    // create alert dialog
-                    AlertDialog alertDialog = alertDialogBuilder.create();
+        // create alert dialog
+        AlertDialog alertDialog = alertDialogBuilder.create();
 
-                    // show it
-                    alertDialog.show();
-                }
+        // show it
+        alertDialog.show();
+    }
+}
+            else{
+                android.app.AlertDialog alertDialog = new android.app.AlertDialog.Builder(context).create();
+
+                alertDialog.setTitle("Info");
+                alertDialog.setMessage("Internet not available, Cross check your internet connectivity and try again");
+                alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+
+                    }
+                });
+
+                alertDialog.show();
+            }
+
 
 
             }

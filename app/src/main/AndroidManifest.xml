@@ -3,6 +3,7 @@
     package="com.acadgild.mypledge.ipledge">
 
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"></uses-permission>
 
     <application
         android:allowBackup="true"
@@ -24,6 +25,7 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -32,9 +34,17 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".MyPledgesActivity"></activity>
-        <activity android:name=".AllPledgesActivity"></activity>
-        <activity android:name=".MyProfile"></activity>
+        <activity android:name=".MyPledgesActivity"
+            android:screenOrientation="portrait"
+            ></activity>
+        <activity android:name=".AllPledgesActivity"
+            android:screenOrientation="portrait"
+            ></activity>
+        <activity android:name=".MyProfile"
+            android:screenOrientation="portrait"
+            ></activity>
+
+        <activity android:name=".FBFriendsListActivity"></activity>
 
 
     </application>

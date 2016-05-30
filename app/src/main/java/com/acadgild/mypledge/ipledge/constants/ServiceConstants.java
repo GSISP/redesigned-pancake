@@ -16,6 +16,8 @@ public class ServiceConstants {
     static final public String ADD_PLEDGE_TO_USER="add_pledge_to_user";
     static final public String GET_USER_PLEDGES="get_user_pledges";
     static final public String GET_PLEDGE_PROGRESS="get_pledge_progress";
+    static final public String UPDATE_PLEDGE="update_pledge_progress";
+
 
 
 
@@ -27,6 +29,7 @@ public class ServiceConstants {
     static final public String ADD_PLEDGE_TO_USER_URL=BASE_URL+ADD_PLEDGE_TO_USER;
     static final public String GET_USER_PLEDGE_URL=BASE_URL+GET_USER_PLEDGES;
     static final public String GET_PLEDGE_PROGRESS_URL=BASE_URL+GET_PLEDGE_PROGRESS;
+    static final public String UPDATE_PLEDGE_URL=BASE_URL+UPDATE_PLEDGE;
 
 
 
