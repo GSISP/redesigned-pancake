@@ -2,28 +2,25 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="5dp"
-    android:padding="5dp">
+    android:layout_margin="10dp"
+    android:background="@android:color/white">
 
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="15dp"
         android:layout_height="wrap_content">
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
 
         <ImageView
             android:layout_width="50dp"
-            android:layout_height="70dp"
-            android:layout_marginRight="4dp"
-            android:layout_gravity="center_vertical"
-            android:src="@drawable/pledge_sample"
-            />
+            android:layout_height="50dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:src="@drawable/logo"
+            android:layout_gravity="bottom"
+            android:id="@+id/img_pledge" />
 
         <LinearLayout
             android:orientation="vertical"
@@ -33,7 +30,8 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="14sp"
+                android:textSize="16sp"
+                android:layout_marginRight="10dp"
                 android:textColor="@android:color/black"
                 android:id="@+id/tv_title"
                 android:textStyle="bold" />
@@ -42,13 +40,41 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@android:color/black"
-                android:textSize="10sp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="10dp"
+                android:textSize="13sp"
                 android:id="@+id/tv_description" />
 
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:paddingRight="5dp"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:orientation="vertical">
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp">
 
                 <LinearLayout
                     android:orientation="vertical"
@@ -59,22 +85,23 @@
                     <LinearLayout
                         android:orientation="horizontal"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="10sp"
+                            android:textSize="13sp"
                             android:text="Points Gained : "
                             android:textColor="@android:color/black"
                             android:textStyle="bold"
                             android:layout_marginLeft="2dp"
-                             />
+                            />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="10sp"
+                            android:textSize="13sp"
                             android:text="0"
                             android:textColor="@android:color/black"
                             android:id="@+id/tv_points"
@@ -85,52 +112,79 @@
                     <LinearLayout
                         android:orientation="horizontal"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="10sp"
+                            android:textSize="13sp"
                             android:text="Quantity Completed  : "
                             android:textColor="@android:color/black"
                             android:clickable="false"
                             android:textStyle="bold"
                             android:layout_marginLeft="2dp"
-                             />
+                            />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="10sp"
+                            android:textSize="13sp"
                             android:text="0"
                             android:id="@+id/tv_quantity"
                             android:textColor="@android:color/black"
-                             />
+                            />
                     </LinearLayout>
                 </LinearLayout>
 
-                <Button
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:background="@drawable/taken"
-                    android:id="@+id/bt_take"
-                    android:layout_gravity="right" />
-            </LinearLayout>
-            <ProgressBar
-                style="?android:attr/progressBarStyleHorizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/progressBar"
-                android:progress="0"
-                android:indeterminate="false"
-                android:progressBackgroundTint="@android:color/holo_green_dark"
-                android:progressTintMode="src_atop"/>
 
+            </LinearLayout>
 
         </LinearLayout>
-
     </LinearLayout>
 
+    <ProgressBar
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/progressBar"
+        android:progress="0"
+        android:layout_marginTop="10dp"
+        android:indeterminate="false"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:progressBackgroundTint="#808080"
+        android:progressTintMode="src_atop"/>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_height="match_parent">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_weight="2"
+            android:textSize="14sp"
+            android:id="@+id/bt_take"
+            android:layout_marginRight="5dp"
+            android:background="@drawable/button_style_border"
+            android:text="UPDATE" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:id="@+id/bt_challenge"
+            android:textSize="14sp"
+            android:layout_weight="2"
+            android:layout_gravity="right"
+            android:background="@drawable/button_style_border"
+            android:text="CHALLENGE" />
+
+    </LinearLayout>
 
 </LinearLayout>

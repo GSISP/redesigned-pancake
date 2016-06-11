@@ -5,10 +5,10 @@ android {
     buildToolsVersion "23.0.3"
 
     defaultConfig {
-        applicationId "com.acadgild.mypledge.ipledge"
+        applicationId "com.acadgild.vpledge"
         minSdkVersion 16
         targetSdkVersion 23
-        versionCode 1
+        versionCode 3
         versionName "1.0"
     }
     buildTypes {
@@ -24,9 +24,10 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:23.3.0'
     compile 'com.android.support:design:23.3.0'
-    compile 'com.facebook.android:facebook-android-sdk:[4,5)'
+    compile 'com.facebook.android:facebook-android-sdk:[3,5)'
     compile 'org.jbundle.util.osgi.wrapped:org.jbundle.util.osgi.wrapped.org.apache.http.client:4.1.2'
     compile 'com.mcxiaoke.volley:library:1.0.17'
     compile group:'com.squareup.picasso', name:'picasso', version:'2.3.2'
     compile 'com.google.code.gson:gson:2.6.2'
+    compile 'com.google.android.gms:play-services-appindexing:8.1.0'
 }

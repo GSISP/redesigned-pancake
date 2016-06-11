@@ -1,4 +1,4 @@
-package com.acadgild.mypledge.ipledge;
+package com.acadgild.vpledge;
 
 import org.junit.Test;
 
