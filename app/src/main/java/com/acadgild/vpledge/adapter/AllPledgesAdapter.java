@@ -150,7 +150,7 @@ public class AllPledgesAdapter extends ArrayAdapter<AllPledgeModel> {
 
                             String user_id = PrefUtils.getFromPrefs(context.getApplicationContext(), MyProfileConstant.KEY_ID, "");
 
-// Building Parameters
+                            // Building Parameters
                             List<NameValuePair> params = new ArrayList<NameValuePair>();
                             params.add(new BasicNameValuePair(MyProfileConstant.KEY_ID, user_id));
                             params.add(new BasicNameValuePair(AllPledgesConstant.KEY_PLEDGE_ID, "" + allPledgeModel.getId()));
@@ -165,6 +165,7 @@ public class AllPledgesAdapter extends ArrayAdapter<AllPledgeModel> {
 
                             Intent pledges = new Intent(getContext().getApplicationContext(),MyPledgesActivity.class);
                             pledges.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                           // pledges.putExtra("pledge",allPledgeModel.getName());
                             getContext().startActivity(pledges);
 
                         }

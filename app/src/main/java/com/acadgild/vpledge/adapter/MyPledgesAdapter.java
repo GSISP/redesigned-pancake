@@ -5,7 +5,6 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -84,7 +83,7 @@ public class MyPledgesAdapter extends ArrayAdapter<AllPledgeModel> {
 
 
         final int completed=allPledgeModel.getPledge_units_completed()/allPledgeModel.getPledge_unit_quantity();
-        Log.e("fb check", completed + "");
+       // Log.e("fb check", completed + "");
 
 
 
@@ -130,7 +129,7 @@ public class MyPledgesAdapter extends ArrayAdapter<AllPledgeModel> {
 
                 String unlock=PrefUtils.getFromPrefs(getContext().getApplicationContext(), "unlock", "0");
 
-                if(completed==1 && unlock.equals("1")) {
+                if(completed==1){ // && unlock.equals("1")) {
                     if (isNetwork.isConnectingToInternet()) {
                         Intent fb_friends_list = new Intent(getContext().getApplicationContext(), FBFriendsListActivity.class);
                         fb_friends_list.putExtra("title", allPledgeModel.getName());
@@ -152,13 +151,13 @@ public class MyPledgesAdapter extends ArrayAdapter<AllPledgeModel> {
                 else{
                     AlertDialog alertDialog = new AlertDialog.Builder(context).create();
                     alertDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                    alertDialog.setTitle("To Unlock Challenge Friends");
-                    if(allPledgeModel.getId()==1){
+                   // alertDialog.setTitle("To Unlock Challenge Friends");
+                   // if(allPledgeModel.getId()==1){
                         alertDialog.setMessage("Complete \"" + allPledgeModel.getName());
-                    }
-                    else {
-                        alertDialog.setMessage("Complete \"" + allPledgeModel.getName() + "\" & \"Use Public Transport for 30 days\"");
-                    }
+                  //  }
+                   // else {
+                    //    alertDialog.setMessage("Complete \"" + allPledgeModel.getName() + "\" & \"Use Public Transport for 30 days\"");
+                  //  }
                     alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {

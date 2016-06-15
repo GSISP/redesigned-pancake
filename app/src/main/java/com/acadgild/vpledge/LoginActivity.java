@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
 import android.view.Window;
+import android.widget.Toast;
 
 import com.acadgild.vpledge.constants.MyProfileConstant;
 import com.acadgild.vpledge.constants.ServiceConstants;
@@ -93,6 +94,8 @@ public class LoginActivity extends Activity {
 
                                 accessToken = login_result.getAccessToken();
 
+                                String ids=accessToken.getUserId();
+
                                 PrefUtils.saveToPrefs(getApplicationContext(), "fb_access_token", String.valueOf(login_result.getAccessToken()));
 
                                 if (response.getError() != null) {
@@ -104,6 +107,16 @@ public class LoginActivity extends Activity {
                                         List<NameValuePair> params = new ArrayList<NameValuePair>();
                                         params.add(new BasicNameValuePair(MyProfileConstant.KEY_NAME, me.optString("name")));
                                         params.add(new BasicNameValuePair(MyProfileConstant.KEY_EMAIL, me.optString("email")));
+                                        params.add(new BasicNameValuePair("fb_id", me.optString("id")));
+
+                                        try {
+                                            Toast.makeText(getApplicationContext(),ids+"..."+me.getString("id"), Toast.LENGTH_SHORT).show();
+                                            Log.e("imp : ",ids+"..."+me.getString("id"));
+
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+
                                         try {
 
                                         // posting JSON string to server URL
